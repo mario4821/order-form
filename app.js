@@ -4,6 +4,14 @@ Items.allItems = [];
 var catalog = document.getElementById('catalog');
 var selections = document.getElementById('selections');
 var option = document.createElement('option');
+var buttonEl = document.getElementById('button');
+var itemQuantity = document.createElement('input');
+var lineItem = document.getElementById('orderLine');
+var addLine = document.getElementById('add-line');
+
+var itemOrdered = [];
+var numberOrdered = [];
+
 
 // constructor function
 function Items(filepath, name) {
@@ -41,27 +49,42 @@ function renderCatalog() {
     catalog.appendChild(option);
     option.src = Items.allItems[i].filepath;
     option.alt = Items.allItems[i].name;
-    console.log(option.alt); 
+    console.log(option.alt);
   }
 }
 
 
 function populateOrder(e) {
-  console.log(e);
   
   var trEl = document.createElement('tr');
   var tdEl = document.createElement('td');
-  tdEl.textContent = e.target.value;
+  tdEl.textContent = lineItem.option.value;
   trEl.appendChild(tdEl);
-  
-  var inputQuantity = document.createElement('input');
-  inputQuantity.setAttribute('type', 'number');
-  trEl.appendChild(inputQuantity);
 
+  tdEl = document.createElement('td');
+  tdEl.textContent = itemQuantity.value;
+  trEl.appendChild(tdEl);
 
   selections.appendChild(trEl);
 }
 
-catalog.addEventListener('change', populateOrder);
+function pushToLocalStorage() {
+  console.log(itemQuantity.value);
+  numberOrdered.push(itemQuantity.value);
+}
+
+//creates skip button option
+function submitButton() {
+  buttonEl.addEventListener('click', clickSubmitButton);
+  buttonEl.textContent = 'Submit Order';
+  buttonEl.style.backgroundColor = 'rgb(135, 161, 182);';
+}
+
+function clickSubmitButton() {
+  pushToLocalStorage();
+}
+
+lineItem.addEventListener('click', populateOrder);
 
 renderCatalog();
+submitButton();
